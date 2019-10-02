@@ -1,5 +1,5 @@
 from room import Room
-
+from player import Player
 # Declare all the rooms
 
 room = {
@@ -49,3 +49,21 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+newPlayer = Player('Player1', 'outside')
+print(newPlayer)
+
+
+def roomInfo(room):
+    print('Room', room)
+
+
+# userInput = input("What direction?:")
+
+
+# def user_commands(uI):
+#     print(uI)
+
+
+# user_commands(userInput)
+roomInfo(Room(room['outside']))
