@@ -1,3 +1,4 @@
+import textwrap
 from room import Room
 from player import Player
 # Declare all the rooms
@@ -50,20 +51,51 @@ room['treasure'].s_to = room['narrow']
 #
 # If the user enters "q", quit the game.
 
-newPlayer = Player('Player1', 'outside')
-print(newPlayer)
+new_player = Player('Player1', room['treasure'])
+# Player name
+pl_name = new_player.name
+# Current Room
+current_room = new_player.current_room
+# Room Name
+rm_name = current_room.name
+rm_description = textwrap.fill(text=current_room.description, width=30)
+print(f"(Room Name:\n {rm_name},\n Room Descr:\n {rm_description})")
+
+user_input = input("Enter a direction (n, s, e, w, or q (quit)): ")
 
 
-def roomInfo(room):
-    print('Room', room)
+def is_valid_input(user_input):
+    print(f"\n68 {user_input}\n")
+    go_to = f"{user_input}_to"
+
+    if hasattr(current_room, go_to):
+        to_room = getattr(current_room, go_to)
+        print('\nHeading to room\n', to_room)
+        return to_room
+    else:
+        print(f"{user_input} is not a valid direction")
+        user_input = input("Enter a direction (n, s, e, w, or q (quit)): ")
+        is_valid_input(user_input)
 
 
-# userInput = input("What direction?:")
+def print_room(room):
+    room_details = f"Room: {room.name}\nDescription: {room.description}"
+    return room_details
 
 
-# def user_commands(uI):
-#     print(uI)
+while user_input != 'q':
+    if user_input in ['n', 's', 'e', 'w']:
+        rm_name = is_valid_input(user_input)
+        room_details = print_room(rm_name)
+        print(f"{room_details}\n")
+        user_input = input("Enter a direction (n, s, e, w, or q (quit)): ")
+        rm_name = is_valid_input(user_input)
+        print(f"You're currently in room {rm_name}\n")
+        # print('')
+        break
+    else:
+        print(f"{user_input} is not a valid direction")
+        user_input = input("Enter a direction (n, s, e, w, or q (quit)): ")
 
-
-# user_commands(userInput)
-roomInfo(Room(room['outside']))
+if user_input == 'q':
+    print('Goodbye')
