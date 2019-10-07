@@ -1,5 +1,6 @@
+import textwrap
 from room import Room
-
+from player import Player
 # Declare all the rooms
 
 room = {
@@ -49,3 +50,46 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+new_player = Player('Player1', room['outside'])
+# Player name
+pl_name = new_player.name
+# Current Room
+current_room = new_player.current_room
+# Room Name
+rm_name = current_room.name
+rm_description = textwrap.fill(text=current_room.description, width=70)
+print(f"\n\n(Room Name:\n {rm_name}\nRoom Descr:\n{rm_description})\n")
+
+user_input = input("Enter a direction (n, s, e, w, or q (quit)): ")
+
+while user_input != 'q':
+    go_to_direction = f"{user_input}_to"
+    # if current_room has go_to_direction(s_to) attribute
+    if hasattr(current_room, go_to_direction):
+        # get the attribute
+        to_room = getattr(current_room, go_to_direction)
+        print('to_room', to_room)
+        # if the attr is == None, prompt user to enter correct direction
+        if to_room == None:
+            to_room = go_to_direction
+            print(f"Wrong way! {user_input} is not a valid direction.")
+            user_input = input("Enter a direction (n, s, e, w, or q (quit)): ")
+        # Else if attr exists update room
+        else:
+            rm_name = to_room
+            # current room updated
+            current_room = rm_name
+            if hasattr(rm_name, 'description'):
+                cr_description = getattr(current_room, 'description')
+                print(f"Welcome to room {rm_name}")
+                print('Description:', cr_description)
+                user_input = input(
+                    "Enter a direction (n, s, e, w, or q (quit)): ")
+            else:
+                print('Room has no further directions')
+    else:
+        print('False', rm_name)
+        break
+if user_input == 'q':
+    print('Goodbye')
